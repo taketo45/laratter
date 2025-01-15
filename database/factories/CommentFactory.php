@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Models\Comment;
 use App\Models\Tweet;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tweet>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
  */
-class TweetFactory extends Factory
+class CommentFactory extends Factory
 {
-    protected $model = Tweet::class;
     /**
      * Define the model's default state.
      *
@@ -20,8 +20,9 @@ class TweetFactory extends Factory
     public function definition(): array
     {
         return [
+            'comment' => fake()->sentence,
             'user_id' => User::factory(),
-            'tweet' => $this->faker->text(200)
+            'tweet' => Tweet::factory(),
         ];
     }
 }
