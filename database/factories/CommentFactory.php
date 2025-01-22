@@ -22,7 +22,8 @@ class CommentFactory extends Factory
         return [
             'comment' => fake()->sentence,
             'user_id' => User::factory(),
-            'tweet' => Tweet::factory(),
+            // 'tweet' => Tweet::factory(),
+            'tweet_id' => Tweet::factory(),
         ];
     }
 }
