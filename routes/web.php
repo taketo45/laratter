@@ -14,6 +14,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/slacks', function () {
+    return view('slacks.index');
+})->name('slacks.index');
+
+Route::get('/slacks/create', function () {
+    return view('slacks.create');
+})->name('slacks.create');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

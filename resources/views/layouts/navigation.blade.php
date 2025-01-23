@@ -21,6 +21,12 @@
                     <x-nav-link :href="route('tweets.create')" :active="request()->routeIs('tweets.create')">
                         {{ __('Tweet作成') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('slacks.index')" :active="request()->routeIs('slacks.index')">
+                        {{ __('Slack一覧') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('slacks.create')" :active="request()->routeIs('slacks.create')">
+                        {{ __('Slack登録') }}
+                    </x-nav-link>
                 </div>
             </div>
 

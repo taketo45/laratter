@@ -52,6 +52,11 @@ class User extends Authenticatable
     {
       return $this->hasMany(Tweet::class);
     }
+
+    public function slacks()
+    {
+      return $this->hasMany(Slack::class);
+    }
     
     public function likes()
     {
