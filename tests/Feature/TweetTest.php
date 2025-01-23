@@ -71,9 +71,11 @@ it('display a tweet', function(){
 
 it('displays the edit tweet page', function(){
     $user = User::factory()->create();
+    $tweet = Tweet::factory()->create(['user_id' => $user->id]);
+
     $this->actingAs($user);
 
-    $tweet = Tweet::factory()->create();
+    // $tweet = Tweet::factory()->create();
     $response = $this->get("/tweets/{$tweet->id}/edit");
 
     $response->assertStatus(200);
@@ -81,9 +83,11 @@ it('displays the edit tweet page', function(){
 });
 it('allows a user to update their tweet', function(){
     $user = User::factory()->create();
+
     $this->actingAs($user);
 
-    $tweet = Tweet::factory()->create();
+    // $tweet = Tweet::factory()->create(['user_id' => $user->id]);
+    $tweet = $user->tweets()->create(Tweet::factory()->raw());
 
     $tweetData=['tweet' => 'This is an updated tweet.'];
     $response = $this->put("/tweets/{$tweet->id}", $tweetData);
@@ -93,14 +97,41 @@ it('allows a user to update their tweet', function(){
     $response->assertStatus(302);
     $response->assertRedirect("/tweets/{$tweet->id}");
 });
+
 it('allows a user to delete their tweet', function(){
     $user = User::factory()->create();
     $this->actingAs($user);
 
-    $tweet = Tweet::factory()->create();
+    $tweet = Tweet::factory()->create(['user_id' => $user->id]);
     $response = $this->delete("/tweets/{$tweet->id}");
 
     $response->assertStatus(302);
     $response->assertRedirect('/tweets');
 
 });
+
+// 更新のテスト（他のユーザのデータが更新できないことを確認）
+it('does not allow unauthorized users to update a tweet', function () {
+    $owner = User::factory()->create();
+    $otherUser = User::factory()->create();
+    $tweet = Tweet::factory()->create(['user_id' => $owner->id]);
+  
+    $this->actingAs($otherUser);
+  
+    $response = $this->put("/tweets/{$tweet->id}", ['tweet' => 'Updated tweet']);
+  
+    $response->assertStatus(403); // Forbidden
+  });
+  
+  // 削除のテスト（他のユーザのデータが削除できないことを確認）
+  it('does not allow unauthorized users to delete a tweet', function () {
+    $owner = User::factory()->create();
+    $otherUser = User::factory()->create();
+    $tweet = Tweet::factory()->create(['user_id' => $owner->id]);
+  
+    $this->actingAs($otherUser);
+  
+    $response = $this->delete("/tweets/{$tweet->id}");
+  
+    $response->assertStatus(403); // Forbidden
+  });
